@@ -1,4 +1,4 @@
-name: Build Kivy APK (Clean & Stable)
+name: SR Bet AI PRO - Build APK
 
 on:
   push:
@@ -8,55 +8,52 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
     # =========================
-    # 1. Checkout Code
+    # Checkout Source Code
     # =========================
-    - name: Checkout repository
+    - name: Checkout repo
       uses: actions/checkout@v4
 
     # =========================
-    # 2. Setup Python
+    # Python Setup
     # =========================
-    - name: Set up Python
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: "3.10"
 
     # =========================
-    # 3. System Dependencies
+    # System Dependencies
     # =========================
-    - name: Install system dependencies
+    - name: Install Linux dependencies
       run: |
         sudo apt update
         sudo apt install -y \
           git zip unzip openjdk-17-jdk \
           build-essential autoconf libtool pkg-config \
           zlib1g-dev libncurses5-dev libncursesw5-dev \
-          libtinfo6 cmake libffi-dev libssl-dev
+          libffi-dev libssl-dev cmake
 
     # =========================
-    # 4. Python Dependencies
+    # Install Build Tools
     # =========================
-    - name: Install Build Tools
+    - name: Install Buildozer
       run: |
         python -m pip install --upgrade pip
         pip install cython==0.29.36 buildozer
 
     # =========================
-    # 5. Build APK
+    # Build APK
     # =========================
-    - name: Build APK with Buildozer
+    - name: Build APK (Production)
       run: |
-        buildozer -v android debug
+        buildozer android debug
 
     # =========================
-    # 6. Upload APK
+    # Upload APK Artifact
     # =========================
-    - name: Upload APK artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: SR-Bet-AI-APK
